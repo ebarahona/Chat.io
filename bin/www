@@ -1,0 +1,281 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('express:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+var io = require('socket.io')(server);
+var counter = 0;
+var nicknames = [];
+var userBase = [];
+var Twitter = require('twitter');
+
+//var fs = require("fs");
+//var mongojs = require("mongojs");
+//
+//var db = mongojs('userlist',['userlist']);
+
+
+//http.get('/userlist',function(req,res){
+//  console.log("hi");
+//  db.userlist.find(function(err,docs){
+//    console.log(docs);
+//  })
+//
+//});
+
+//http.post('')
+
+
+//io.on('connection', function(socket){
+//  var count = 0;
+//
+//
+//  var client = new Twitter({
+//    consumer_key: 'z5QjDeWtVG6KY2GX0LUR2jGpY',
+//    consumer_secret: 'CqHkFU0PZiMHv7YpoeoauQZnxVOJ6ZnQzIbvrzsWIW1PRsUuEH',
+//    access_token_key: '2496149816-NApOJhkCOoYfPfj9rzbyBz7u06vtIbcOPz8iRdC',
+//    access_token_secret: 'slxlmutKN7tahUEcu9SHZ2Wf7pYw3CiQqC43PMkUqs2OM',
+//    request_options: {
+//      proxy: 'http://s.harmeet:flyingguns@172.16.114.183:3128'
+//    }
+//  });
+//
+//
+//  client.stream('statuses/filter', {track: 'love'}, function(stream) {
+//    stream.on('data', function(tweet) {
+//      count++;
+//      console.log(tweet.text);
+//
+//      //setTimeout(function(){
+//        socket.emit("tweets",
+//            {
+//              "Tweet":tweet.text,
+//              "Count": count
+//            }
+//        );
+//      //},20);
+//      //setTimeout(function(){},300);
+//
+//
+//
+//      //socket.emit("tweets",
+//      //    {
+//      //      "Frequency": Math.round(tweet.text.length / 10) * 10 ,
+//      //      "Tweet Length": tweet.text.length.toString()
+//      //    }
+//      //);
+//
+//    });
+//
+//    stream.on('error', function(error) {
+//      throw error;
+//    });
+//
+//    setTimeout(function(){
+//      stream.destroy();
+//      console.log(count);
+//      //console.log(arr);
+//    },3000)
+//  });
+//
+//});
+
+///********************THIS IS ORIGINAL ANGULAR********************************start
+
+//io.on('connection', function(socket){
+//
+//  //socket.emit('init',db.userlist.find(function(err,docs){
+//  //  console.log(JSON(docs));
+//  //  return JSON(docs);
+//  //}));
+//
+//  socket.on('new user', function(data, callback){
+//
+//    socket.nickname = data;
+//    nicknames.push(socket.nickname);
+//    updateNicknames();
+//
+//  });
+//
+//  function updateNicknames(){
+//    io.emit('usernames', nicknames);
+//  }
+//
+//  counter++;
+//  //socket.emit('init');
+//  console.log('#',counter,' user connected');
+//  socket.emit("user id", counter);
+//
+//  socket.on("username",function(name){
+//    socket.broadcast.emit('entering person',name + " "+"just entered")
+//  });
+//  socket.on('chat message', function(msg){
+//    io.emit('chat message',msg);
+//    console.log(msg);
+//  });
+//
+//  //socket.on('last', function(msg){
+//  //    io.emit('chat message',msg);
+//  //});
+//});
+
+
+///********************THIS IS ORIGINAL ANGULAR********************************end
+
+
+///********************THIS IS ORIGINAL********************************start
+
+io.on('connection', function(socket){
+
+  //socket.emit('init',db.userlist.find(function(err,docs){
+  //  console.log(JSON(docs));
+  //  return JSON(docs);
+  //}));
+
+  updateNicknames();
+  socket.chatStats = 0;
+  socket.on('new user', function(data, callback){
+    socket.nickname = data;
+    nicknames.push(socket.nickname);
+    userBase.push({
+      name: socket.nickname,
+      stats: 0
+    });
+    updateNicknames();
+
+    //if (nicknames.indexOf(data) != -1){
+    //  callback(false);
+    //} else{
+    //  callback(true);
+    //
+    //}
+  });
+
+  function updateNicknames(){
+    io.emit('usernames', nicknames);
+  }
+
+//****************************FOLLOWING IS ORIG.
+  counter++;
+  //socket.emit('init');
+  console.log('#',counter,' user connected');
+  socket.emit("user id", counter);
+
+  socket.on("new user",function(name){
+    socket.broadcast.emit('entering person',name + " "+"just entered");
+    io.emit('justNames', userBase);
+  });
+  socket.on('chat message', function(msg){
+    socket.chatStats++;
+    io.emit('chat message',{message:msg,id:socket.nickname,stats:socket.chatStats});
+    console.log(msg);
+    for(i=0;i<userBase.length;i++){
+      if(userBase[i].name == socket.nickname)
+      {
+        userBase[i].stats++;
+      }
+    }
+  });
+
+//****************************FOLLOWING IS ORIG.
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+    socket.broadcast.emit('leaving person',socket.nickname+ " "+"just left");
+    nicknames.splice(nicknames.indexOf(socket.nickname), 1);
+    updateNicknames();
+  });
+
+  //socket.on('last', function(msg){
+  //    io.emit('chat message',msg);
+  //});
+});
+
+
+///********************THIS IS ORIGINAL********************************end
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

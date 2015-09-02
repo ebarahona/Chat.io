@@ -1,0 +1,40 @@
+
+/*body {*/
+/*background: black;*/
+/*}*/
+
+/*circle {*/
+/*fill: rgba(255, 255, 255, 0.2);*/
+/*/!*shape-rendering: crispEdges;*!/*/
+/*}*/
+
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    /*background: black;*/
+}
+
+.axis text {
+    font: 14pt sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.chartBox{
+    margin-left:350px;
+    max-width:1200px;
+    /*background: white;*/
+    /*z-index: 1000;*/
+    overflow-x: auto !important;
+}
+.tooltip{
+    max-width: 150px;
+
+}

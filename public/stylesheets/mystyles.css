@@ -1,0 +1,54 @@
+
+
+
+#form2{
+    display: none;
+    /*bottom: 0%;*/
+    /*position: fixed;*/
+    /*z-index: 1000;*/
+
+}
+
+.fixBottom{
+    position: fixed;
+    bottom: 0;
+    /*width: 100%;*/
+}
+
+/*.messenger{*/
+    /*max-width: 500px;*/
+    /*display: inline;*/
+/*}*/
+
+.content{
+    padding:10px;
+}
+
+/*.messenger{*/
+    /*margin-top: 100px;*/
+/*}*/
+
+.axis text {
+    font: 14pt sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.chartBox{
+    margin-left:30px;
+    /*max-width:1200px;*/
+    /*background: white;*/
+    /*z-index: 1000;*/
+    /*overflow-x: auto !important;*/
+}
+.tooltip{
+    max-width: 150px;
+
+}

@@ -1,0 +1,91 @@
+
+body {
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400
+}
+
+h1,h2,h3,h4,h5,h6,.navbar-brand,.brand-name {
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400
+}
+
+p.lead {
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400
+}
+
+
+header.marquee {
+    padding: 50px 0;
+    text-align: center;
+    color: #000;
+    /*background-color: #b84d45;*/
+    background-image: url(../images/bg.png);
+    overflow: hidden;
+}
+
+header.marquee .brand-name {
+    display: block;
+    font-size: 50px;
+    line-height: 1
+}
+
+header.marquee h1 {
+    font-size: 24px;
+    line-height: 1;
+    margin: 20px 0
+}
+
+header.marquee p {
+    font-size: 16px;
+    color: rgba(255,255,255,.8);
+    line-height: 1.4
+}
+
+header.marquee p a {
+    color: #000;
+}
+
+header.marquee img.logo {
+    margin-bottom: 50px
+}
+
+header.marquee .btn-cta {
+    margin: 20px 0 0;
+    padding: 10px 15px;
+    border: 1px solid #fff;
+    background-color: transparent;
+    color: #000;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    font-size: 14px
+}
+
+header.marquee .btn-cta:hover {
+    color: #273238;
+    background-color: #fff
+}
+
+@media (min-width: 768px) {
+    header.marquee {
+        padding:150px 0
+    }
+
+    header.marquee .brand-name {
+        font-size: 80px
+    }
+
+    header.marquee h1 {
+        font-size: 34px
+    }
+
+    header.marquee p {
+        font-size: 20px
+    }
+
+    header.marquee .btn-cta {
+        padding: 15px 20px;
+        font-size: 18px
+    }
+}
+
